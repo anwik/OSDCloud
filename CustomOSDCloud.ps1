@@ -1,6 +1,6 @@
 $OSLanguage = "sv-se"
 $OSBuild = "21H1"
-$OSEdition "Enterprise"
+$OSEdition = "Enterprise"
 
 
 Write-Host  -ForegroundColor Cyan "Installing Windows 10 $($OSBuild) $($OSEdition) ..."
