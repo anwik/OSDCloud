@@ -16,11 +16,8 @@ Import-Module OSD -Force
 
 #Start OSDCloud ZTI without Autopilot.json
 Write-Host  -ForegroundColor Cyan "Start OSDCloud with MY Parameters"
-Start-OSDCloud -OSLanguage sv-se -OSBuild 21H1 -OSEdition Enterprise -ZTI -SkipAutopilot
+Start-OSDCloud -OSLanguage sv-se -OSBuild 21H1 -OSEdition Enterprise -ZTI
 
-#Enable Autopilot registration in Audit mode
-Write-Host  -ForegroundColor Cyan "Preparing for Autopilot in Audit Mode ..."
-Use-WindowsUnattend.audit.autopilot
 
 #Restart from WinPE
 Write-Host  -ForegroundColor Cyan "Restarting in 20 seconds!"
