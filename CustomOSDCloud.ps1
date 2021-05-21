@@ -1,9 +1,4 @@
-$OSLanguage = "sv-se"
-$OSBuild = "21H1"
-$OSEdition = "Enterprise"
-
-
-Write-Host  -ForegroundColor Cyan "Installing Windows 10 $($OSBuild) $($OSEdition) ..."
+Write-Host  -ForegroundColor Cyan "Starting SeguraOSD's Custom OSDCloud ..."
 Start-Sleep -Seconds 5
 
 #Change Display Resolution for Virtual Machine
@@ -12,8 +7,8 @@ if ((Get-MyComputerModel) -match 'Virtual') {
     Set-DisRes 1600
 }
 
-#Install latest OSD module
-Write-Host  -ForegroundColor Cyan "Updating the OSD Module"
+#Make sure I have the latest OSD Content
+Write-Host  -ForegroundColor Cyan "Updating the awesome OSD PowerShell Module"
 Install-Module OSD -Force
 
 Write-Host  -ForegroundColor Cyan "Importing the sweet OSD PowerShell Module"
@@ -26,13 +21,13 @@ Write-Warning "That didn't work because I haven't coded it yet!"
 
 #Start OSDCloud ZTI the RIGHT way
 Write-Host  -ForegroundColor Cyan "Start OSDCloud with MY Parameters"
-Start-OSDCloud -OSLanguage $OSLanguage -OSBuild $OSBuild -OSEdition $OSEdition -ZTI -SkipAutopilot
+Start-OSDCloud -OSLanguage sv-se -OSBuild 21H2 -OSEdition Enterprise -ZTI -SkipAutopilot
 
-# Prepare Autopilot process using audit mode
-Write-Host  -ForegroundColor Cyan "Enabling audit mode for Autopilot registration ..."
-Use-WindowsUnattend.audit.autopilot
+#Anything I want  can go right here and I can change it at any time since it is in the Cloud!!!!!
+Write-Host  -ForegroundColor Cyan "Starting OSDCloud PostAction ..."
+Write-Warning "I'm not sure of what to put here yet"
 
 #Restart from WinPE
-#Write-Host  -ForegroundColor Cyan "Restarting in 20 seconds!"
-#Start-Sleep -Seconds 20
-#wpeutil reboot
+Write-Host  -ForegroundColor Cyan "Restarting in 20 seconds!"
+Start-Sleep -Seconds 20
+wpeutil reboot
