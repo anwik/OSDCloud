@@ -26,7 +26,7 @@ Write-Warning "That didn't work because I haven't coded it yet!"
 
 #Start OSDCloud ZTI the RIGHT way
 Write-Host  -ForegroundColor Cyan "Start OSDCloud with MY Parameters"
-Start-OSDCloud -OSLanguage $OSLanguage -OSBuild $OSBuild -OSEdition $OSEdition -ZTI -SkipAutopilot True
+Start-OSDCloud -OSLanguage $OSLanguage -OSBuild $OSBuild -OSEdition $OSEdition -ZTI -SkipAutopilot
 
 # Prepare Autopilot process using audit mode
 Write-Host  -ForegroundColor Cyan "Enabling audit mode for Autopilot registration ..."
