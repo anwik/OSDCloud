@@ -17,7 +17,6 @@ $Params = @{
     OSBuild = "21H2"
     OSEdition = "Pro"
     OSLanguage = "sv-se"
-    OSCulture = "sv-se"
     OSLicense = "Retail"
     SkipAutopilot = $true
     SkipODT = $true
