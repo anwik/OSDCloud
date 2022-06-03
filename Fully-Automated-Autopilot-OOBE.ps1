@@ -111,7 +111,35 @@ REM start "Start-AutopilotOOBE" PowerShell -NoL -C Start-AutopilotOOBE -Title 'O
 
 exit
 '@
-$SetCommand | Out-File -FilePath "C:\Windows\System32\Startnet.cmd" -Encoding ascii -Force
+$SetCommand | Out-File -FilePath "C:\Windows\Autopilot.cmd" -Encoding ascii -Force
+
+
+$UnattendXml = @'
+<?xml version="1.0" encoding="utf-8"?>
+<unattend xmlns="urn:schemas-microsoft-com:unattend">
+	<settings pass="specialize">
+		<component name="Microsoft-Windows-Deployment"
+		           processorArchitecture="amd64"
+		           publicKeyToken="31bf3856ad364e35"
+		           language="neutral"
+		           versionScope="nonSxS"
+		           xmlns:wcm="http://schemas.microsoft.com/WMIConfig/2002/State"
+		           xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+			<RunSynchronous>
+				<RunSynchronousCommand wcm:action="add">
+					<Order>1</Order>
+					<Description>OSDCloud Specialize</Description>
+					<Path>Powershell -ExecutionPolicy Bypass -Command Start-OOBEDeploy -Verbose</Path>
+				</RunSynchronousCommand>
+			</RunSynchronous>
+		</component>
+	</settings>
+</unattend>
+'@
+
+$UnattendXml | Out-File -FilePath "C:\Windows\System32\Oobe\Info\Oobe.xml" -Encoding ascii -Force
+
+
 #================================================
 #   PostOS
 #   Restart-Computer
