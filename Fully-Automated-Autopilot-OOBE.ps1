@@ -114,6 +114,10 @@ exit
 $SetCommand | Out-File -FilePath "C:\Windows\Autopilot.cmd" -Encoding ascii -Force
 
 
+if (-NOT (Test-Path 'C:\Windows\System32\Oobe\Info')) {
+        New-Item -Path 'C:\Windows\System32\Oobe\Info' -ItemType Directory -Force -ErrorAction Stop | Out-Null
+    }
+
 $UnattendXml = @'
 <?xml version="1.0" encoding="utf-8"?>
 <unattend xmlns="urn:schemas-microsoft-com:unattend">
