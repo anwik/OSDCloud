@@ -132,9 +132,6 @@ $UnattendXml = @'
             </RunSynchronous>
         </component>
     </settings>
-    </RunSynchronous>
-    </component>
-</settings>
 </unattend>
 '@
 #=================================================
