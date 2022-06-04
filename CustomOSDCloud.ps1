@@ -33,6 +33,9 @@ $OOBEDeployJson = @'
     "Autopilot":  {
                       "IsPresent":  false
                   },
+    "AddNetFX3":  {
+                      "IsPresent":  true
+                    },                     
     "RemoveAppx":  [
                        "Microsoft.549981C3F5F10",
                         "Microsoft.BingWeather",
@@ -81,29 +84,90 @@ $AutopilotOOBEJson = @'
     "Assign":  {
                    "IsPresent":  true
                },
-    "GroupTag":  "Mittelschulen",
-    "AddToGroup": "sg-GYMWM",
-    "AddToGroupOptions":  [
-                    "sg-GYMWM",
-                    "sg-GYMKG"
-    ],
+    "GroupTag":  "Karlstad",
+    "AddToGroup": "Intune Config - Defender for Endpoint EDR",
     "Hidden":  [
                    "AssignedComputerName",
                    "AssignedUser",
                    "PostAction",
                    "GroupTag",
-                   "Assign"
+                   "Assign",
+                   "Run",
+                   "Docs"
                ],
     "PostAction":  "Quit",
-    "Run":  "NetworkingWireless",
-    "Docs":  "https://google.com/",
-    "Title":  "EDUBS PoC Autopilot Register"
+    "Title":  "ANWIK Autopilot OOBE Demo"
 }
 '@
 If (!(Test-Path "C:\ProgramData\OSDeploy")) {
     New-Item "C:\ProgramData\OSDeploy" -ItemType Directory -Force | Out-Null
 }
 $AutopilotOOBEJson | Out-File -FilePath "C:\ProgramData\OSDeploy\OSDeploy.AutopilotOOBE.json" -Encoding ascii -Force
+
+#=================================================
+#	UnattendXml
+#=================================================
+$UnattendXml = @'
+<?xml version="1.0" encoding="utf-8"?>
+<unattend xmlns="urn:schemas-microsoft-com:unattend">
+    <settings pass="specialize">
+        <component name="Microsoft-Windows-Deployment" processorArchitecture="amd64" publicKeyToken="31bf3856ad364e35" language="neutral" versionScope="nonSxS" xmlns:wcm="http://schemas.microsoft.com/WMIConfig/2002/State" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+            <RunSynchronous>
+                <RunSynchronousCommand wcm:action="add">
+                    <Order>1</Order>
+                    <Description>OSDCloud Specialize</Description>
+                    <Path>Powershell -ExecutionPolicy Bypass -Command Invoke-OSDSpecialize -Verbose</Path>
+                </RunSynchronousCommand>
+            </RunSynchronous>
+        </component>
+    </settings>
+    <settings pass="oobeSystem">
+        <component name="Microsoft-Windows-Deployment" processorArchitecture="amd64" publicKeyToken="31bf3856ad364e35" language="neutral" versionScope="nonSxS" xmlns:wcm="http://schemas.microsoft.com/WMIConfig/2002/State" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+            <RunSynchronousCommand wcm:action="add">
+                <Order>2</Order>
+                <Description>ANWIK Autopilot OOBE</Description>
+                <Path>Powershell -ExecutionPolicy Bypass -Command Start-OOBEDeploy -Verbose</Path>
+        </component>
+    </settings>
+    </RunSynchronous>
+    </component>
+</settings>
+</unattend>
+'@
+#=================================================
+#	Block
+#=================================================
+Block-WinOS
+Block-WindowsVersionNe10
+Block-PowerShellVersionLt5
+#=================================================
+#	Directories
+#=================================================
+if (-NOT (Test-Path 'C:\Windows\Panther')) {
+    New-Item -Path 'C:\Windows\Panther'-ItemType Directory -Force -ErrorAction Stop | Out-Null
+}
+#=================================================
+#	Panther Unattend
+#=================================================
+$Panther = 'C:\Windows\Panther'
+$UnattendPath = "$Panther\Unattend.xml"
+Write-Verbose -Verbose "Setting $UnattendPath"
+$UnattendXml | Out-File -FilePath $UnattendPath -Encoding utf8 -Width 2000 -Force
+#=================================================
+#	Copy PSModule
+#=================================================
+Write-Verbose -Verbose "Copy-PSModuleToFolder -Name OSD to C:\Program Files\WindowsPowerShell\Modules"
+Copy-PSModuleToFolder -Name OSD -Destination 'C:\Program Files\WindowsPowerShell\Modules'
+#=================================================
+#	Use-WindowsUnattend
+#=================================================
+Write-Verbose -Verbose "Use-WindowsUnattend -Path 'C:\' -UnattendPath $UnattendPath"
+Use-WindowsUnattend -Path 'C:\' -UnattendPath $UnattendPath -Verbose
+Notepad $UnattendPath
+#=================================================
+
+
+
 
 #================================================
 #  [PostOS] AutopilotOOBE CMD Command Line
@@ -114,7 +178,6 @@ PowerShell -NoL -Com Set-ExecutionPolicy RemoteSigned -Force
 Set Path = %PATH%;C:\Program Files\WindowsPowerShell\Scripts
 Start /Wait PowerShell -NoL -C Install-Module AutopilotOOBE -Force -Verbose
 Start /Wait PowerShell -NoL -C Install-Module OSD -Force -Verbose
-Start /Wait PowerShell -NoL -C Invoke-WebPSScript https://raw.githubusercontent.com/DIGIT-BS/OSDCloud/main/Set-KeyboardLanguage.ps1
 Start /Wait PowerShell -NoL -C Start-AutopilotOOBE
 Start /Wait PowerShell -NoL -C Start-OOBEDeploy
 Start /Wait PowerShell -NoL -C Restart-Computer -Force
