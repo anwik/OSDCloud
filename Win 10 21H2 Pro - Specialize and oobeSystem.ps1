@@ -1,4 +1,4 @@
-
+Write-Host  -ForegroundColor Cyan 'Windows 10 21H2 Pro Autopilot Specialize and oobeSystem Demo'
 #================================================
 #   [PreOS] Update Module
 #================================================
