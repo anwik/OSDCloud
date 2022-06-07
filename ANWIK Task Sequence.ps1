@@ -20,8 +20,6 @@ $Params = @{
     OSBuild = "21H2"
     OSEdition = "Pro"
     OSLanguage = "sv-se"
-    SkipODT = $true
-    SkipOOBEDeploy = $false
     ZTI = $true
 }
 Start-OSDCloud @Params
