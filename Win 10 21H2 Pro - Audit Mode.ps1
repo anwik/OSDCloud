@@ -1,4 +1,4 @@
-Write-Host  -ForegroundColor Cyan 'Windows 10 21H2 Pro Autopilot OOBE Demo'
+Write-Host  -ForegroundColor Cyan 'OSDCloud Autopilot Audit Mode Demo'
 #=======================================================================
 #   Set-DisRes
 #=======================================================================
