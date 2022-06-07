@@ -107,6 +107,29 @@ $AutopilotOOBEJson | Out-File -FilePath "C:\ProgramData\OSDeploy\OSDeploy.Autopi
 #=================================================
 #	UnattendXml
 #=================================================
+#$UnattendXml = @'
+#<?xml version="1.0" encoding="utf-8"?>
+#<unattend xmlns="urn:schemas-microsoft-com:unattend">
+#    <settings pass="specialize">
+#        <component name="Microsoft-Windows-Deployment" processorArchitecture="amd64" publicKeyToken="31bf3856ad364e35" language="neutral" versionScope="nonSxS" xmlns:wcm="http://schemas.microsoft.com/WMIConfig/2002/State" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+#            <RunSynchronous>
+#                <RunSynchronousCommand wcm:action="add">
+#                    <Order>1</Order>
+#                    <Description>OSDCloud Specialize</Description>
+#                    <Path>Powershell -ExecutionPolicy Bypass -Command Invoke-OSDSpecialize -Verbose</Path>
+#                </RunSynchronousCommand>
+#                <RunSynchronousCommand wcm:action="add">
+#                    <Order>2</Order>
+#                    <RequiresUserInput>true</RequiresUserInput>
+#                    <Description>Autopilot OOBE</Description>
+#                    <Path>cmd /C start /wait c:\Windows\Autopilot.cmd</Path>
+#                </RunSynchronousCommand>
+#            </RunSynchronous>
+#        </component>
+#    </settings>
+#</unattend>
+#'@
+
 $UnattendXml = @'
 <?xml version="1.0" encoding="utf-8"?>
 <unattend xmlns="urn:schemas-microsoft-com:unattend">
@@ -115,12 +138,8 @@ $UnattendXml = @'
             <RunSynchronous>
                 <RunSynchronousCommand wcm:action="add">
                     <Order>1</Order>
-                    <Description>OSDCloud Specialize</Description>
-                    <Path>Powershell -ExecutionPolicy Bypass -Command Invoke-OSDSpecialize -Verbose</Path>
-                </RunSynchronousCommand>
-                <RunSynchronousCommand wcm:action="add">
-                    <Order>2</Order>
-                    <Description>OSDCloud Specialize</Description>
+                    <RequiresUserInput>true</RequiresUserInput>
+                    <Description>Autopilot OOBE</Description>
                     <Path>cmd /C start /wait c:\Windows\Autopilot.cmd</Path>
                 </RunSynchronousCommand>
             </RunSynchronous>
