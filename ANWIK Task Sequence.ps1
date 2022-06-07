@@ -123,19 +123,14 @@ $UnattendXml = @'
                 <RunSynchronousCommand wcm:action="add">
                     <Order>2</Order>
                     <Description>OSDCloud Specialize</Description>
-                    <Path>cmd /c Autopilot.cmd</Path>
+                    <Path>cmd /C start /wait c:\Windows\Autopilot.cmd</Path>
                 </RunSynchronousCommand>
             </RunSynchronous>
         </component>
     </settings>
 </unattend>
 '@
-#=================================================
-#	Block
-#=================================================
-Block-WinOS
-Block-WindowsVersionNe10
-Block-PowerShellVersionLt5
+
 #=================================================
 #	Directories
 #=================================================
@@ -169,7 +164,7 @@ Notepad $UnattendPath
 #  [PostOS] AutopilotOOBE CMD Command Line
 #================================================
 
-Write-Host -ForegroundColor Green "Create C:\Windows\System32\Autopilot.cmd"
+Write-Host -ForegroundColor Green "Create C:\Windows\Autopilot.cmd"
 $AutopilotCMD = @'
 PowerShell -NoL -Com Set-ExecutionPolicy RemoteSigned -Force
 Set Path = %PATH%;C:\Program Files\WindowsPowerShell\Scripts
@@ -179,20 +174,13 @@ Start /Wait PowerShell -NoL -C Start-AutopilotOOBE
 Start /Wait PowerShell -NoL -C Start-OOBEDeploy
 Start /Wait PowerShell -NoL -C Restart-Computer -Force
 '@
-$AutopilotCMD | Out-File -FilePath 'C:\Windows\System32\Autopilot.cmd' -Encoding ascii -Force
+$AutopilotCMD | Out-File -FilePath 'C:\Windows\Autopilot.cmd' -Encoding ascii -Force
 
 #================================================
 #  [PostOS] SetupComplete CMD Command Line
 #================================================
 Write-Host -ForegroundColor Green "Create C:\Windows\Setup\Scripts\SetupComplete.cmd"
 $SetupCompleteCMD = @'
-PowerShell -NoL -Com Set-ExecutionPolicy RemoteSigned -Force
-Set Path = %PATH%;C:\Program Files\WindowsPowerShell\Scripts
-Start /Wait PowerShell -NoL -C Install-Module AutopilotOOBE -Force -Verbose
-Start /Wait PowerShell -NoL -C Install-Module OSD -Force -Verbose
-Start /Wait PowerShell -NoL -C Start-AutopilotOOBE
-Start /Wait PowerShell -NoL -C Start-OOBEDeploy
-Start /Wait PowerShell -NoL -C Restart-Computer -Force
 RD C:\OSDCloud\OS /S /Q
 RD C:\Drivers /S /Q
 '@
