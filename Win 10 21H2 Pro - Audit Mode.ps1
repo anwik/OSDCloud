@@ -43,14 +43,14 @@ $AuditUnattendXml = @'
 
             <RunSynchronousCommand wcm:action="add">
             <Order>2</Order>
-            <Description>Install AutopilotOOBE Module</Description>
-            <Path>PowerShell -Command "Install-Module AutopilotOOBE -Force"</Path>
+            <Description>Install OOBEDeploy Module</Description>
+            <Path>PowerShell -Command "Install-Module OOBEDeploy -Force"</Path>
             </RunSynchronousCommand>
 
             <RunSynchronousCommand wcm:action="add">
             <Order>3</Order>
             <Description>OOBEDeploy</Description>
-            <Path>PowerShell -Command "Start-AutopilotOOBE"</Path>
+            <Path>PowerShell -Command "Start-OOBEDeploy"</Path>
             </RunSynchronousCommand>
 
             </RunSynchronous>
