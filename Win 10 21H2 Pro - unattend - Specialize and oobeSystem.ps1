@@ -20,9 +20,6 @@ $Params = @{
     OSBuild = "21H2"
     OSEdition = "Pro"
     OSLanguage = "sv-se"
-    #SkipAutopilot = $true
-    SkipODT = $true
-    SkipOOBEDeploy = $false
     ZTI = $true
 }
 Start-OSDCloud @Params
@@ -121,28 +118,31 @@ $UnattendXml = @'
                     <Description>OSDCloud Specialize</Description>
                     <Path>Powershell -ExecutionPolicy Bypass -Command Invoke-OSDSpecialize -Verbose</Path>
                 </RunSynchronousCommand>
-                <RunSynchronousCommand wcm:action="add">
-                    <Order>2</Order>
-                    <Description>OSDCloud Specialize</Description>
-                    <Path>cmd /c Autopilot.cmd</Path>
-                </RunSynchronousCommand>
             </RunSynchronous>
+        </component>
+    </settings>
+    <settings pass="oobeSystem">
+        <component name="Microsoft-Windows-Shell-Setup" processorArchitecture="amd64" publicKeyToken="31bf3856ad364e35" language="neutral" versionScope="nonSxS" xmlns:wcm="http://schemas.microsoft.com/WMIConfig/2002/State" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+           <FirstLogonCommands>
+               <SynchronousCommand wcm:action="add">
+                   <CommandLine>cmd.exe</CommandLine>
+                   <Description>Launch cmd</Description>
+                   <Order>1</Order>
+                   <RequiresUserInput>true</RequiresUserInput>
+                </SynchronousCommand>
+           </FirstLogonCommands>
         </component>
     </settings>
 </unattend>
 '@
-#=================================================
-#	Block
-#=================================================
-Block-WinOS
-Block-WindowsVersionNe10
-Block-PowerShellVersionLt5
+
 #=================================================
 #	Directories
 #=================================================
 if (-NOT (Test-Path 'C:\Windows\Panther')) {
     New-Item -Path 'C:\Windows\Panther'-ItemType Directory -Force -ErrorAction Stop | Out-Null
 }
+
 #=================================================
 #	Panther Unattend
 #=================================================
@@ -150,11 +150,13 @@ $Panther = 'C:\Windows\Panther'
 $UnattendPath = "$Panther\Unattend.xml"
 Write-Verbose -Verbose "Setting $UnattendPath"
 $UnattendXml | Out-File -FilePath $UnattendPath -Encoding utf8 -Width 2000 -Force
+
 #=================================================
 #	Copy PSModule
 #=================================================
 Write-Verbose -Verbose "Copy-PSModuleToFolder -Name OSD to C:\Program Files\WindowsPowerShell\Modules"
 Copy-PSModuleToFolder -Name OSD -Destination 'C:\Program Files\WindowsPowerShell\Modules'
+
 #=================================================
 #	Use-WindowsUnattend
 #=================================================
@@ -162,9 +164,6 @@ Write-Verbose -Verbose "Use-WindowsUnattend -Path 'C:\' -UnattendPath $UnattendP
 Use-WindowsUnattend -Path 'C:\' -UnattendPath $UnattendPath -Verbose
 Notepad $UnattendPath
 #=================================================
-
-
-
 
 #================================================
 #  [PostOS] AutopilotOOBE CMD Command Line
@@ -194,6 +193,6 @@ $SetupCompleteCMD | Out-File -FilePath 'C:\Windows\Setup\Scripts\SetupComplete.c
 #=======================================================================
 #   Restart-Computer
 #=======================================================================
-Write-Host  -ForegroundColor Green "Restarting in 20 seconds!"
-Start-Sleep -Seconds 20
-wpeutil reboot
+#Write-Host  -ForegroundColor Green "Restarting in 20 seconds!"
+#Start-Sleep -Seconds 20
+#wpeutil reboot

@@ -1,8 +1,4 @@
-#This demo shows how to use OSDCloud rebooting to Audit Mode and running OOBEDeploy
-#You can modify your OSDCloud WinPE by running the following command
-#Edit-OSDCloud.winpe -WebPSScript 'https://raw.githubusercontent.com/OSDeploy/OSDCloud/main/Samples/AuditModeOOBEDeploy.ps1'
-Write-Host  -ForegroundColor Cyan 'Demo OSDCloud Audit Mode OOBEDeploy'
-Start-Sleep -Seconds 10
+Write-Host  -ForegroundColor Cyan 'Windows 10 21H2 Pro Autopilot OOBE Demo'
 #=======================================================================
 #   Set-DisRes
 #=======================================================================
@@ -47,14 +43,14 @@ $AuditUnattendXml = @'
 
             <RunSynchronousCommand wcm:action="add">
             <Order>2</Order>
-            <Description>Update OSD Module</Description>
-            <Path>PowerShell -Command "Install-Module OSD -Force"</Path>
+            <Description>Install AutopilotOOBE Module</Description>
+            <Path>PowerShell -Command "Install-Module AutopilotOOBE -Force"</Path>
             </RunSynchronousCommand>
 
             <RunSynchronousCommand wcm:action="add">
             <Order>3</Order>
             <Description>OOBEDeploy</Description>
-            <Path>PowerShell -Command "Start-OOBEDeploy -AddRSAT -AddNetFX3 -UpdateDrivers -UpdateWindows -RemoveAppx CommunicationsApps,OfficeHub,People,Skype,Solitaire,Xbox,Zune"</Path>
+            <Path>PowerShell -Command "Start-AutopilotOOBE"</Path>
             </RunSynchronousCommand>
 
             </RunSynchronous>
@@ -62,6 +58,88 @@ $AuditUnattendXml = @'
     </settings>
 </unattend>
 '@
+
+#================================================
+#  [PostOS] OOBEDeploy Configuration
+#================================================
+Write-Host -ForegroundColor Green "Create C:\ProgramData\OSDeploy\OSDeploy.OOBEDeploy.json"
+$OOBEDeployJson = @'
+{
+    "Autopilot":  {
+                      "IsPresent":  false
+                  },
+    "AddNetFX3":  {
+                      "IsPresent":  true
+                    },                     
+    "RemoveAppx":  [
+                       "Microsoft.549981C3F5F10",
+                        "Microsoft.BingWeather",
+                        "Microsoft.GetHelp",
+                        "Microsoft.Getstarted",
+                        "Microsoft.Microsoft3DViewer",
+                        "Microsoft.MicrosoftOfficeHub",
+                        "Microsoft.MicrosoftSolitaireCollection",
+                        "Microsoft.MixedReality.Portal",
+                        "Microsoft.People",
+                        "Microsoft.SkypeApp",
+                        "Microsoft.Wallet",
+                        "Microsoft.WindowsCamera",
+                        "microsoft.windowscommunicationsapps",
+                        "Microsoft.WindowsFeedbackHub",
+                        "Microsoft.WindowsMaps",
+                        "Microsoft.Xbox.TCUI",
+                        "Microsoft.XboxApp",
+                        "Microsoft.XboxGameOverlay",
+                        "Microsoft.XboxGamingOverlay",
+                        "Microsoft.XboxIdentityProvider",
+                        "Microsoft.XboxSpeechToTextOverlay",
+                        "Microsoft.YourPhone",
+                        "Microsoft.ZuneMusic",
+                        "Microsoft.ZuneVideo"
+                   ],
+    "UpdateDrivers":  {
+                          "IsPresent":  true
+                      },
+    "UpdateWindows":  {
+                          "IsPresent":  true
+                      }
+}
+'@
+If (!(Test-Path "C:\ProgramData\OSDeploy")) {
+    New-Item "C:\ProgramData\OSDeploy" -ItemType Directory -Force | Out-Null
+}
+$OOBEDeployJson | Out-File -FilePath "C:\ProgramData\OSDeploy\OSDeploy.OOBEDeploy.json" -Encoding ascii -Force
+
+#================================================
+#  [PostOS] AutopilotOOBE Configuration Staging
+#================================================
+Write-Host -ForegroundColor Green "Create C:\ProgramData\OSDeploy\OSDeploy.AutopilotOOBE.json"
+$AutopilotOOBEJson = @'
+{
+    "Assign":  {
+                   "IsPresent":  true
+               },
+    "GroupTag":  "Karlstad",
+    "AddToGroup": "Intune Config - Defender for Endpoint EDR",
+    "Hidden":  [
+                   "AssignedComputerName",
+                   "AssignedUser",
+                   "PostAction",
+                   "GroupTag",
+                   "Assign",
+                   "Run",
+                   "Docs"
+               ],
+    "PostAction":  "Quit",
+    "Title":  "ANWIK Autopilot OOBE Demo"
+}
+'@
+If (!(Test-Path "C:\ProgramData\OSDeploy")) {
+    New-Item "C:\ProgramData\OSDeploy" -ItemType Directory -Force | Out-Null
+}
+$AutopilotOOBEJson | Out-File -FilePath "C:\ProgramData\OSDeploy\OSDeploy.AutopilotOOBE.json" -Encoding ascii -Force
+
+
 #=======================================================================
 #   Audit Mode
 #=======================================================================

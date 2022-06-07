@@ -107,29 +107,6 @@ $AutopilotOOBEJson | Out-File -FilePath "C:\ProgramData\OSDeploy\OSDeploy.Autopi
 #=================================================
 #	UnattendXml
 #=================================================
-#$UnattendXml = @'
-#<?xml version="1.0" encoding="utf-8"?>
-#<unattend xmlns="urn:schemas-microsoft-com:unattend">
-#    <settings pass="specialize">
-#        <component name="Microsoft-Windows-Deployment" processorArchitecture="amd64" publicKeyToken="31bf3856ad364e35" language="neutral" versionScope="nonSxS" xmlns:wcm="http://schemas.microsoft.com/WMIConfig/2002/State" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
-#            <RunSynchronous>
-#                <RunSynchronousCommand wcm:action="add">
-#                    <Order>1</Order>
-#                    <Description>OSDCloud Specialize</Description>
-#                    <Path>Powershell -ExecutionPolicy Bypass -Command Invoke-OSDSpecialize -Verbose</Path>
-#                </RunSynchronousCommand>
-#                <RunSynchronousCommand wcm:action="add">
-#                    <Order>2</Order>
-#                    <RequiresUserInput>true</RequiresUserInput>
-#                    <Description>Autopilot OOBE</Description>
-#                    <Path>cmd /C start /wait c:\Windows\Autopilot.cmd</Path>
-#                </RunSynchronousCommand>
-#            </RunSynchronous>
-#        </component>
-#    </settings>
-#</unattend>
-#'@
-
 $UnattendXml = @'
 <?xml version="1.0" encoding="utf-8"?>
 <unattend xmlns="urn:schemas-microsoft-com:unattend">
@@ -138,9 +115,8 @@ $UnattendXml = @'
             <RunSynchronous>
                 <RunSynchronousCommand wcm:action="add">
                     <Order>1</Order>
-                    <RequiresUserInput>true</RequiresUserInput>
                     <Description>Autopilot OOBE</Description>
-                    <Path>cmd /C start /wait c:\Windows\Autopilot.cmd</Path>
+                    <Path>cmd.exe</Path>
                 </RunSynchronousCommand>
             </RunSynchronous>
         </component>
@@ -154,6 +130,7 @@ $UnattendXml = @'
 if (-NOT (Test-Path 'C:\Windows\Panther')) {
     New-Item -Path 'C:\Windows\Panther'-ItemType Directory -Force -ErrorAction Stop | Out-Null
 }
+
 #=================================================
 #	Panther Unattend
 #=================================================
@@ -161,11 +138,13 @@ $Panther = 'C:\Windows\Panther'
 $UnattendPath = "$Panther\Unattend.xml"
 Write-Verbose -Verbose "Setting $UnattendPath"
 $UnattendXml | Out-File -FilePath $UnattendPath -Encoding utf8 -Width 2000 -Force
+
 #=================================================
 #	Copy PSModule
 #=================================================
 Write-Verbose -Verbose "Copy-PSModuleToFolder -Name OSD to C:\Program Files\WindowsPowerShell\Modules"
 Copy-PSModuleToFolder -Name OSD -Destination 'C:\Program Files\WindowsPowerShell\Modules'
+
 #=================================================
 #	Use-WindowsUnattend
 #=================================================
@@ -174,14 +153,10 @@ Use-WindowsUnattend -Path 'C:\' -UnattendPath $UnattendPath -Verbose
 Notepad $UnattendPath
 #=================================================
 
-
-
-
 #================================================
 #  [PostOS] AutopilotOOBE CMD Command Line
 #================================================
-
-Write-Host -ForegroundColor Green "Create C:\Windows\Autopilot.cmd"
+Write-Host -ForegroundColor Green "Create C:\Windows\System32\Autopilot.cmd"
 $AutopilotCMD = @'
 PowerShell -NoL -Com Set-ExecutionPolicy RemoteSigned -Force
 Set Path = %PATH%;C:\Program Files\WindowsPowerShell\Scripts
@@ -191,7 +166,7 @@ Start /Wait PowerShell -NoL -C Start-AutopilotOOBE
 Start /Wait PowerShell -NoL -C Start-OOBEDeploy
 Start /Wait PowerShell -NoL -C Restart-Computer -Force
 '@
-$AutopilotCMD | Out-File -FilePath 'C:\Windows\Autopilot.cmd' -Encoding ascii -Force
+$AutopilotCMD | Out-File -FilePath 'C:\Windows\System32\Autopilot.cmd' -Encoding ascii -Force
 
 #================================================
 #  [PostOS] SetupComplete CMD Command Line
@@ -206,6 +181,6 @@ $SetupCompleteCMD | Out-File -FilePath 'C:\Windows\Setup\Scripts\SetupComplete.c
 #=======================================================================
 #   Restart-Computer
 #=======================================================================
-Write-Host  -ForegroundColor Green "Restarting in 5 seconds!"
-Start-Sleep -Seconds 5
-wpeutil reboot
+#Write-Host  -ForegroundColor Green "Restarting in 20 seconds!"
+#Start-Sleep -Seconds 20
+#wpeutil reboot
