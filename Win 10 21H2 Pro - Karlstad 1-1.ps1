@@ -1,4 +1,4 @@
-Write-Host  -ForegroundColor Cyan 'Windows 10 21H2 Pro Autopilot Specialize and oobeSystem Demo'
+Write-Host  -ForegroundColor Cyan 'Windows 10 21H2 Pro Autopilot Karlstad 1-1'
 #================================================
 #   [PreOS] Update Module
 #================================================
@@ -17,7 +17,8 @@ Import-Module OSD -Force
 #   [OS] Params and Start-OSDCloud
 #=======================================================================
 $Params = @{
-    OSBuild = "21H2"
+    OSName = "Windows 10 21H2 x64"
+    OSLicense = "Retail"
     OSEdition = "Pro"
     OSLanguage = "sv-se"
     ZTI = $true
