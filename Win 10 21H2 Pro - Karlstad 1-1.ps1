@@ -121,18 +121,6 @@ $UnattendXml = @'
             </RunSynchronous>
         </component>
     </settings>
-    <settings pass="oobeSystem">
-        <component name="Microsoft-Windows-Shell-Setup" processorArchitecture="amd64" publicKeyToken="31bf3856ad364e35" language="neutral" versionScope="nonSxS" xmlns:wcm="http://schemas.microsoft.com/WMIConfig/2002/State" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
-           <FirstLogonCommands>
-               <SynchronousCommand wcm:action="add">
-                   <CommandLine>cmd.exe</CommandLine>
-                   <Description>Launch cmd</Description>
-                   <Order>1</Order>
-                   <RequiresUserInput>true</RequiresUserInput>
-                </SynchronousCommand>
-           </FirstLogonCommands>
-        </component>
-    </settings>
 </unattend>
 '@
 
@@ -168,7 +156,7 @@ Notepad $UnattendPath
 #================================================
 #  [PostOS] AutopilotOOBE CMD Command Line
 #================================================
-Write-Host -ForegroundColor Green "Create C:\Windows\System32\Autopilot.cmd"
+Write-Host -ForegroundColor Green "Create C:\Windows\System32\hej.cmd"
 $AutopilotCMD = @'
 PowerShell -NoL -Com Set-ExecutionPolicy RemoteSigned -Force
 Set Path = %PATH%;C:\Program Files\WindowsPowerShell\Scripts
@@ -178,7 +166,7 @@ Start /Wait PowerShell -NoL -C Start-AutopilotOOBE
 Start /Wait PowerShell -NoL -C Start-OOBEDeploy
 Start /Wait PowerShell -NoL -C Restart-Computer -Force
 '@
-$AutopilotCMD | Out-File -FilePath 'C:\Windows\System32\Autopilot.cmd' -Encoding ascii -Force
+$AutopilotCMD | Out-File -FilePath 'C:\Windows\System32\hej.cmd' -Encoding ascii -Force
 
 #================================================
 #  [PostOS] SetupComplete CMD Command Line
