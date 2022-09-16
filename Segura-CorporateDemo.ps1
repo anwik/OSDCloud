@@ -15,7 +15,7 @@
 Script should be executed in a Command Prompt using the following command
 powershell Invoke-Expression -Command (Invoke-RestMethod -Uri aka.osdcloud.com/virtualexpo/corporatedemo)
 This is abbreviated as
-powershell iex(irm aka.osdcloud.com/virtualexpo/corporatedemo)
+powershell iex(irm https://raw.githubusercontent.com/OSDeploy/virtualexpo/main/corporatedemo.ps1)
 https://raw.githubusercontent.com/OSDeploy/virtualexpo/main/corporatedemo.ps1
 #>
 <#
