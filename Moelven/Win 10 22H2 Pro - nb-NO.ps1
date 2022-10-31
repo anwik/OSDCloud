@@ -1,4 +1,4 @@
-Write-Host  -ForegroundColor Cyan 'Windows 10 21H2 Pro Autopilot Karlstad 1-1'
+Write-Host  -ForegroundColor Cyan 'Windows 10 22H2 Pro Autopilot nb-NO'
 #================================================
 #   [PreOS] Update Module
 #================================================
@@ -86,6 +86,10 @@ $AutopilotOOBEJson = @'
                    "IsPresent":  true
                },
     "GroupTag":  "Office",
+    "GroupOptions":  [
+                "Office",
+                "Production",
+    ],
     "AddToGroup": "AADGroupX",
     "AddToGroupOptions":  [
                     "AADGroupX",
@@ -95,7 +99,6 @@ $AutopilotOOBEJson = @'
                    "AssignedComputerName",
                    "AssignedUser",
                    "PostAction",
-                   "GroupTag",
                    "Assign"
                ],
     "PostAction":  "Quit",
@@ -113,7 +116,7 @@ $AutopilotOOBEJson | Out-File -FilePath "C:\ProgramData\OSDeploy\OSDeploy.Autopi
 #================================================
 #  [PostOS] AutopilotOOBE CMD Command Line
 #================================================
-Write-Host -ForegroundColor Green "Create C:\Windows\System32\hej.cmd"
+Write-Host -ForegroundColor Green "Create C:\Windows\System32\OOBE.cmd"
 $OOBECMD = @'
 PowerShell -NoL -Com Set-ExecutionPolicy RemoteSigned -Force
 Set Path = %PATH%;C:\Program Files\WindowsPowerShell\Scripts
