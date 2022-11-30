@@ -82,29 +82,30 @@ $OOBEDeployJson | Out-File -FilePath "C:\ProgramData\OSDeploy\OSDeploy.OOBEDeplo
 Write-Host -ForegroundColor Green "Create C:\ProgramData\OSDeploy\OSDeploy.AutopilotOOBE.json"
 $AutopilotOOBEJson = @'
 {
-    "Assign":  {
-                   "IsPresent":  true
-               },
-    "GroupTag":  "Office",
-    "GroupOptions":  [
-                "Office",
-                "Production",
-    ],
-    "AddToGroup": "AADGroupX",
-    "AddToGroupOptions":  [
-                    "AADGroupX",
-                    "AADroupY"
-    ],
-    "Hidden":  [
-                   "AssignedComputerName",
-                   "AssignedUser",
-                   "PostAction",
-                   "Assign"
-               ],
-    "PostAction":  "Quit",
-    "Run":  "NetworkingWireless",
-    "Docs":  "https://google.com/",
-    "Title":  "Moelven Autopilot Register"
+	"Assign": {
+		"IsPresent": true
+	},
+	"GroupTag": "Office",
+	"GroupOptions": [
+		"Office",
+		"Production"
+	],
+	"AddToGroup": "AADGroupX",
+	"AddToGroupOptions": [
+		"AADGroupX",
+		"AADroupY"
+	],
+	"Hidden": [
+		"AssignedComputerName",
+		"AssignedUser",
+		"PostAction",
+		"Assign",
+		"AddToGroup"
+	],
+	"PostAction": "Quit",
+	"Run": "NetworkingWireless",
+	"Docs": "https://google.com/",
+	"Title": "Moelven Autopilot Registration"
 }
 '@
 If (!(Test-Path "C:\ProgramData\OSDeploy")) {
