@@ -90,11 +90,6 @@ $AutopilotOOBEJson = @'
 		"Office",
 		"Production"
 	],
-	"AddToGroup": "AADGroupX",
-	"AddToGroupOptions": [
-		"AADGroupX",
-		"AADroupY"
-	],
 	"Hidden": [
 		"AssignedComputerName",
 		"AssignedUser",
