@@ -86,7 +86,7 @@ $AutopilotOOBEJson = @'
 		"IsPresent": true
 	},
 	"GroupTag": "Office",
-	"GroupOptions": [
+	"GroupTagOptions": [
 		"Office",
 		"Production"
 	],
