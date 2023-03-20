@@ -17,12 +17,12 @@ Import-Module OSD -Force
 #   [OS] Params and Start-OSDCloud
 #=======================================================================
 $Params = @{
-    OSVersion = "Windows 10"
-    OSBuild = "22H2"
-    OSEdition = "Pro"
+    OSVersion  = "Windows 10"
+    OSBuild    = "22H2"
+    OSEdition  = "Pro"
     OSLanguage = "sv-SE"
-    OSLicense = "Retail"
-    ZTI = $true
+    OSLicense  = "Retail"
+    ZTI        = $true
 }
 Start-OSDCloud @Params
 
@@ -83,22 +83,18 @@ $OOBEDeployJson | Out-File -FilePath "C:\ProgramData\OSDeploy\OSDeploy.OOBEDeplo
 Write-Host -ForegroundColor Green "Create C:\ProgramData\OSDeploy\OSDeploy.AutopilotOOBE.json"
 $AutopilotOOBEJson = @'
 {
-	"Assign": {
-		"IsPresent": true
-	},
-	"Hidden": [
-		"GroupTag",
-        "GroupTagOptions",
-        "AssignedComputerName",
-		"AssignedUser",
-		"PostAction",
-		"Assign",
-		"AddToGroup"
-	],
-	"PostAction": "Quit",
-	"Run": "NetworkingWireless",
-	"Docs": "https://google.com/",
-	"Title": "NWT Autopilot Registrering"
+    "Assign":  {
+    "IsPresent":  true
+},
+    "AssignedComputerNameExample":  "Azure AD Join Only",
+    "Hidden":  [
+    "AddToGroup",
+    "AssignedComputerName",
+    "GroupTag"
+],
+    "PostAction":  "Restart",
+    "Run":  "NetworkingWireless",
+    "Title":  "NWT \u0026 Autopilot Registration"
 }
 '@
 If (!(Test-Path "C:\ProgramData\OSDeploy")) {
