@@ -94,7 +94,7 @@ $AutopilotOOBEJson = @'
 ],
     "PostAction":  "Restart",
     "Run":  "NetworkingWireless",
-    "Title":  "NWT \u0026 Autopilot Registration"
+    "Title":  "NWT Autopilot Registrering"
 }
 '@
 If (!(Test-Path "C:\ProgramData\OSDeploy")) {
