@@ -1,4 +1,4 @@
-Write-Host  -ForegroundColor Cyan 'Windows 10 22H2 Pro Autopilot sv-SE'
+Write-Host  -ForegroundColor Cyan 'Windows 11 22H2 Pro Autopilot sv-SE'
 #================================================
 #   [PreOS] Update Module
 #================================================
@@ -17,7 +17,7 @@ Import-Module OSD -Force
 #   [OS] Params and Start-OSDCloud
 #=======================================================================
 $Params = @{
-    OSVersion = "Windows 10"
+    OSVersion = "Windows 11"
     OSBuild = "22H2"
     OSEdition = "Pro"
     OSLanguage = "sv-SE"
